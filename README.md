@@ -1,12 +1,12 @@
-[Status](#status) |
-[Getting Started](#getting-started) |
-[Documentation](#documentation) |
-[Development](#development) |
-[License](#license)
-
-# Wild Magic.js 🧙‍♀️
+# Wild Magic.js 🍄✨
 
 🧙‍♀️ An Isomorphic Data-Driven Entity Component System
+
+> [Status](#status) |
+> [Getting Started](#getting-started) |
+> [Documentation](#documentation) |
+> [Development](#development) |
+> [License](#license)
 
 ## Status
 
