@@ -2,6 +2,8 @@
 
 🧙‍♀️ An Isomorphic Data-Driven Entity Component System
 
+[![CircleCI](https://circleci.com/gh/kenjinp/Wild-Magic.js/tree/master.svg?style=svg)](https://circleci.com/gh/kenjinp/Wild-Magic.js/tree/master)
+
 > [Status](#status) |
 > [Getting Started](#getting-started) |
 > [Documentation](#documentation) |

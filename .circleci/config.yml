@@ -35,3 +35,5 @@ jobs:
 
       # run tests!
       - run: npm test
+
+      - run: ./node_modules/jest/bin/jest.js --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
