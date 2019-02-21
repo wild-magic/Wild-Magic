@@ -1,7 +1,4 @@
 language: node_js
-env:
-  global:
-    - CC_TEST_REPORTER_ID=291d2d74d5ae751f746d53c924cec30bea3e3426babc136ef3f3d7d1d3b01b4b
 build:
   cache:
   directories:
