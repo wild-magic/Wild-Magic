@@ -2,7 +2,7 @@
 
 🧙‍♀️ An Isomorphic Data-Driven Entity Component System
 
-[![CircleCI](https://circleci.com/gh/kenjinp/Wild-Magic.svg?style=svg)](https://circleci.com/gh/kenjinp/Wild-Magic)
+[![CircleCI](https://circleci.com/gh/kenjinp/Wild-Magic.svg?style=shield)](https://circleci.com/gh/kenjinp/Wild-Magic)
 [![Coverage Status](https://coveralls.io/repos/github/kenjinp/Wild-Magic/badge.svg?branch=master)](https://coveralls.io/github/kenjinp/Wild-Magic?branch=master)
 
 > [Status](#status) |
