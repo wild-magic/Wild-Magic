@@ -1,20 +1,24 @@
 {
-  "name": "Soup.js",
+  "name": "wild-magic",
   "version": "1.0.0-alpha.1",
   "description": "An Isomorphic Data-Driven Entity Component System",
   "keywords": [
     "typescript",
     "games",
-    "game engine",
-    "entity component system"
+    "game",
+    "engine",
+    "entity",
+    "component",
+    "system",
+    "ecs"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kenjinp/Soup.js.git"
+    "url": "git+https://github.com/kenjinp/wild-magic.git"
   },
   "main": "lib/index.js",
   "module": "es/index.js",
-  "unpkg": "dist/soup.js",
+  "unpkg": "dist/wild-magic.js",
   "license": "Apache-2.0",
   "scripts": {
     "test": "jest",

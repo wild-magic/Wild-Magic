@@ -4,9 +4,9 @@
 [Development](#development) |
 [License](#license)
 
-# Soup.js 🥣
+# Wild Magic.js 🧙‍♀️
 
-🥣 An Isomorphic Data-Driven Entity Component System
+🧙‍♀️ An Isomorphic Data-Driven Entity Component System
 
 ## Status
 

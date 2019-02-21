@@ -2,8 +2,8 @@ import replace from 'rollup-plugin-replace';
 import typescript from 'rollup-plugin-typescript';
 import { terser } from 'rollup-plugin-terser';
 
-const libName = 'soup-js';
-const umdName = 'Soup';
+const libName = 'wild-magic';
+const umdName = 'WildMagic';
 
 export default [
   // Browser Development
