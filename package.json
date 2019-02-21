@@ -1,0 +1,80 @@
+{
+  "name": "Soup.js",
+  "version": "1.0.0-alpha.1",
+  "description": "An Isomorphic Data-Driven Entity Component System",
+  "keywords": [
+    "typescript",
+    "games",
+    "game engine",
+    "entity component system"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kenjinp/Soup.js.git"
+  },
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "unpkg": "dist/soup.js",
+  "license": "Apache-2.0",
+  "scripts": {
+    "test": "jest",
+    "lint": "tslint src/**/*",
+    "build": "npm run clean && npm run build:commonjs && npm run build:es && npm run build:umd",
+    "build:commonjs": "tsc --module commonjs --target es5 --outDir lib",
+    "build:es": "tsc --module es2015 --target es5 --outDir es",
+    "build:umd": "rollup -c",
+    "documentation": "typedoc --out documentation/ --exclude \"**/*+(test|spec).ts\" src/",
+    "clean": "rm -fr es/ && rm -fr dist/ && rm -fr lib/ && rm -fr documentation/",
+    "prepublishOnly": "npm run clean && npm run test && npm run lint && npm run build"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "@types/jest": "^23.3.5",
+    "eslint": "^5.6.0",
+    "jest": "^24.1.0",
+    "jest-fetch-mock": "^2.0.1",
+    "rollup": "^0.66.4",
+    "rollup-plugin-replace": "^2.1.0",
+    "rollup-plugin-terser": "^3.0.0",
+    "rollup-plugin-typescript": "^1.0.0",
+    "ts-jest": "^23.10.4",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.11.0",
+    "tslint-config-airbnb": "^5.11.0",
+    "tslint-config-prettier": "^1.16.0",
+    "typedoc": "^0.13.0",
+    "typescript": "^3.0.3"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
+  },
+  "jest": {
+    "roots": [
+      "<rootDir>/src"
+    ],
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "setupFiles": [
+      "./test/setupJest.js"
+    ]
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "all"
+  },
+  "dependencies": {}
+}
