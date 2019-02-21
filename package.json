@@ -14,7 +14,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kenjinp/wild-magic.git"
+    "url": "git+https://github.com/kenjinp/Wild-Magic.js"
   },
   "main": "lib/index.js",
   "module": "es/index.js",
