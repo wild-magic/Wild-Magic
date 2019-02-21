@@ -1,8 +1,9 @@
-# Wild Magic.js 🍄✨
+# Wild Magic 🍄✨
 
 🧙‍♀️ An Isomorphic Data-Driven Entity Component System
 
 [![CircleCI](https://circleci.com/gh/kenjinp/Wild-Magic.js/tree/master.svg?style=svg)](https://circleci.com/gh/kenjinp/Wild-Magic.js/tree/master)
+[![Coverage Status](https://coveralls.io/repos/github/kenjinp/Wild-Magic/badge.svg?branch=master)](https://coveralls.io/github/kenjinp/Wild-Magic?branch=master)
 
 > [Status](#status) |
 > [Getting Started](#getting-started) |
