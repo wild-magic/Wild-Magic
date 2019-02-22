@@ -15,6 +15,23 @@
 
 Pre-alpha
 
+## Use it to run your game!
+
+```typescript
+  import { Engine, System } from 'wild-magic';
+
+  const renderSystem = new System({
+    onUpdate: (delta: number) => doRenderingStuff();
+  });
+
+  const engine = new Engine();
+  engine
+    .addSystem(renderSystem)
+    .start();
+
+  requestAnimationFrame(engine.tick);
+```
+
 ### ✓ TODO list
 
 #### Classes
@@ -22,6 +39,7 @@ Pre-alpha
 - [ ] Entity
 - [ ] Component
 - [ ] System
+- [✓] Engine
 
 #### Examples
 

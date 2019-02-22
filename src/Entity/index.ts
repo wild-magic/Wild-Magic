@@ -1,11 +1,11 @@
-import uuid from 'uuid/v4';
+import { v4 } from 'uuid';
 import { Component } from '..';
 
 export default class Entity {
   readonly uuid: string;
   public components: Component[];
   constructor() {
-    this.uuid = uuid();
+    this.uuid = v4();
     this.components = [];
   }
 }
