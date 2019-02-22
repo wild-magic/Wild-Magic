@@ -55,6 +55,7 @@ describe('Engine', () => {
     it('should not iterate through systems if its not running', () => {
       let testDelta = 0;
       const mySystem = new System({
+        name: 'mySystem',
         onUpdate: delta => (testDelta = delta),
       });
       const engine = new Engine();
@@ -66,6 +67,7 @@ describe('Engine', () => {
     it('should iterate through systems and call their update functions with the right delta value', () => {
       let testValue = 0;
       const mySystem = new System({
+        name: 'mySystem',
         onUpdate: delta => (testValue = delta),
       });
       const engine = new Engine();
@@ -81,12 +83,24 @@ describe('Engine', () => {
   describe('addSystem()', () => {
     it('should add a system and return itself', () => {
       const mySystem = new System({
+        name: 'mySystem',
         onUpdate: () => {},
       });
       const engine = new Engine();
       const isChainable = engine.addSystem(mySystem);
       expect(isChainable).toBe(engine);
       expect(engine).toHaveProperty('systems', [mySystem]);
+    });
+
+    it('should initialize a system with some value', () => {
+      const mySystem = new System<{ hello: string }>({
+        name: 'mySystem',
+        onInit: () => ({ hello: 'world' }),
+        onUpdate: () => {},
+      });
+      const engine = new Engine();
+      engine.addSystem(mySystem);
+      expect(mySystem).toHaveProperty('data', { hello: 'world' });
     });
   });
 });

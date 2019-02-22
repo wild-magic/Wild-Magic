@@ -4,7 +4,7 @@ import { present } from '../utils';
 export default class Engine {
   private isRunning: boolean;
   private latestTick: number;
-  private systems: System[];
+  private systems: System<any>[];
 
   constructor() {
     this.isRunning = false;
@@ -12,12 +12,14 @@ export default class Engine {
     this.systems = [];
   }
   start(): Engine {
+    console.log('starting engine');
     this.isRunning = true;
     this.latestTick = present();
     this.tick();
     return this;
   }
   stop(): Engine {
+    console.log('stopping engine');
     this.isRunning = false;
     return this;
   }
@@ -28,8 +30,10 @@ export default class Engine {
     }
     return this;
   }
-  addSystem(system: System): Engine {
+  addSystem(system: System<any>): Engine {
+    console.log('adding system: ', system.name);
     this.systems.push(system);
+    system.init();
     return this;
   }
 }
