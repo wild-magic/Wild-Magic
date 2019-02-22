@@ -1,6 +1,6 @@
 # Wild Magic 🍄✨
 
-🧙‍♀️ An Isomorphic Data-Driven Entity Component System
+🧙‍♀️ An Isomorphic Data-Driven Entity Component System, inspired by Vue.js
 
 Wild Magic is powerful, shifting, and dangerous. Wield it against equally unpredictable situations, like when you'd like that chair to animate into a living being, or a health position to transmutate into a gold brick.
 
@@ -20,18 +20,25 @@ Pre-alpha
 ## Use it to run your game!
 
 ```typescript
-  import { Engine, System } from 'wild-magic';
+import { Engine, System } from 'wild-magic';
+import World from './World';
 
-  const renderSystem = new System({
-    onUpdate: (delta: number) => doRenderingStuff();
-  });
+const renderSystem = new System<{ world: World }>({
+  name: 'renderSystem',
+  onInit: () => {
+    return {
+      world: new World(),
+    };
+  },
+  onUpdate: (delta: number, { world }: any) => {
+    world.update();
+  },
+});
 
-  const engine = new Engine();
-  engine
-    .addSystem(renderSystem)
-    .start();
+const engine = new Engine();
+engine.addSystem(renderSystem).start();
 
-  requestAnimationFrame(engine.tick);
+requestAnimationFrame(engine.tick);
 ```
 
 ### ✓ TODO list

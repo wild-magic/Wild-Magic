@@ -23,6 +23,6 @@ export default class System<T> {
   }
 
   update(delta: number): void {
-    this.handleUpdate(delta, this.data);
+    this.handleUpdate(delta, this.data ? (this.data as T) : null);
   }
 }
