@@ -1,5 +1,6 @@
 import { v4 } from 'uuid';
 import { Component } from '..';
+import { EntityConfig } from './types';
 
 /**
  *
@@ -12,9 +13,16 @@ import { Component } from '..';
  */
 export default class Entity {
   readonly uuid: string;
-  public components: Component[];
-  constructor() {
+  private name?: string;
+  private components: Component<any>[];
+  public createdAt: number;
+  public updatedAt?: number;
+  constructor(entityConfig?: EntityConfig) {
     this.uuid = v4();
-    this.components = [];
+    this.createdAt = Date.now();
+    if (entityConfig && entityConfig.name) {
+      this.name = entityConfig.name;
+    }
+    this.components = entityConfig ? entityConfig.components : [];
   }
 }

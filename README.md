@@ -15,7 +15,7 @@ Wild Magic is powerful, shifting, and dangerous. Wield it against equally unpred
 
 ## Status
 
-Pre-alpha
+⚠ Alpha! ⚠ Just like Wild Magic, the nature of this code is ever-shifting!
 
 ## Use it to run your game!
 
@@ -45,10 +45,10 @@ requestAnimationFrame(engine.tick);
 
 #### Classes
 
-- [ ] Entity
-- [ ] Component
-- [ ] System
-- [✓] Engine
+- [x] Entity
+- [x] Component
+- [x] System
+- [x] Engine
 
 #### Examples
 
