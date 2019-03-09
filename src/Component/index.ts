@@ -1,3 +1,5 @@
+import { ComponentFunction, ComponentOutput } from './types';
+
 /**
  *
  *

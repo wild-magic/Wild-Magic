@@ -1,6 +1,8 @@
-interface ComponentOutput<Data> {
+export interface ComponentOutput<Data> {
   name: string;
   data: Data;
 }
 
-type ComponentFunction<Data> = (dataOverride?: any) => ComponentOutput<Data>;
+export type ComponentFunction<Data> = (
+  dataOverride?: any,
+) => ComponentOutput<Data>;
