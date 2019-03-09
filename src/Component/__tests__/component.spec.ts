@@ -22,6 +22,7 @@ describe('createComponent()', () => {
 
   it('should be able to have default properties replaced on init', () => {
     expect(
+      // TODO how to make this fail type checking?!
       positionComponent({
         x: 'a',
       }),
