@@ -6,3 +6,6 @@ export const present = (): number => {
   }
   return performance.now();
 };
+
+export const diffArray = (a: any[], b: any[]) =>
+  b.filter(i => a.indexOf(i) < 0);

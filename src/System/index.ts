@@ -5,6 +5,7 @@ import {
 } from './types';
 import { EntitiesState, EntityActions } from '../Engine/types';
 import { EntityState } from '../Entity/types';
+import { diffArray } from '../utils';
 
 export default class System<T> {
   private data: T | null;
@@ -13,6 +14,7 @@ export default class System<T> {
   public handleUpdate: SystemConfig<T>['onUpdate'];
   private handleInit?: SystemConfig<T>['onInit'];
   private handleEntityAdded?: SystemConfig<T>['onEntityAdded'];
+  private entityUUIDlist: string[] = [];
 
   constructor(systemConfig: SystemConfig<T>) {
     this.data = null;
@@ -32,6 +34,7 @@ export default class System<T> {
   // attach entities and stuff
   addEntity(entity: any): void {
     if (this.handleEntityAdded) {
+      this.entityUUIDlist.push(entity.uuid);
       this.handleEntityAdded(entity, this.data ? (this.data as T) : null);
     }
   }
@@ -41,6 +44,17 @@ export default class System<T> {
     entities: EntityState[],
     entityActions: EntityActions,
   ): void {
+    // add new enitties to system which were added after init
+    const diff = diffArray(
+      this.entityUUIDlist,
+      entities.map(entity => entity.uuid),
+    );
+
+    diff.forEach(entityUUID => {
+      this.addEntity(entities.find(entity => entity.uuid === entityUUID));
+    });
+
+    // update all associated entities
     this.handleUpdate(
       delta,
       entities,
