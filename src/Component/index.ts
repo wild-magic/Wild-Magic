@@ -13,15 +13,9 @@ export function createComponent<Data>(
   name: string,
   defaultData: Data,
 ): ComponentFunction<Data> {
-  const componentOutput: ComponentOutput<Data> = {
-    name,
-    data: defaultData,
-  };
-  return (dataOverride: any): ComponentOutput<Data> => {
-    return new Component(
-      name,
-      Object.assign(componentOutput.data, dataOverride),
-    );
+  return function(dataOverride: any): ComponentOutput<Data> {
+    const newStuff = { ...defaultData, ...dataOverride };
+    return new Component(name, newStuff);
   };
 }
 

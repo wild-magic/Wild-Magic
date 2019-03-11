@@ -31,7 +31,7 @@ export default class Engine {
   filterEntitiesByComponentTypes(types: string[]) {
     return Object.values(this.entities).filter(
       entity =>
-        entity.components.filter((component: any) =>
+        (entity.components || []).filter((component: any) =>
           types.includes(component.name),
         ).length,
     );
@@ -69,7 +69,10 @@ export default class Engine {
   }
   addSystem(system: System<any>): Engine {
     this.systems.push(system);
-    system.init();
+    system.init(
+      this.filterEntitiesByComponentTypes(system.componentTypes),
+      this.entityActions,
+    );
     // prime the system by adding entities
     this.filterEntitiesByComponentTypes(system.componentTypes).forEach(
       (entity: any) => system.addEntity(entity),

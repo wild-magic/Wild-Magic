@@ -8,7 +8,10 @@ export type SystemUpdateCallback<T> = (
   initializableItem: T | null,
 ) => void;
 
-export type SystemInitCallback<T> = () => T;
+export type SystemInitCallback<T> = (
+  entities: EntityState[],
+  entityActions: EntityActions,
+) => T;
 
 export interface SystemConfig<T> {
   name: string;

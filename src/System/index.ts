@@ -25,9 +25,9 @@ export default class System<T> {
     this.componentTypes = systemConfig.componentTypes || [];
   }
 
-  init(): void {
+  init(entities: EntityState[], entityActions: EntityActions): void {
     if (this.handleInit) {
-      this.data = this.handleInit();
+      this.data = this.handleInit(entities, entityActions);
     }
   }
 
