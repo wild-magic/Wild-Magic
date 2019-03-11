@@ -9,11 +9,15 @@ import { ComponentFunction, ComponentOutput } from './types';
  * @param {Data} defaultData
  * @returns {ComponentFunction<Data>}
  */
+
 export function createComponent<Data>(
   name: string,
   defaultData: Data,
 ): ComponentFunction<Data> {
   return function(dataOverride: any): ComponentOutput<Data> {
+    // @ts-ignore
+    // Spread types may only be created from object types.
+    // https://github.com/Microsoft/TypeScript/issues/26412
     const newStuff = { ...defaultData, ...dataOverride };
     return new Component(name, newStuff);
   };
