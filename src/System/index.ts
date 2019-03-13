@@ -29,6 +29,7 @@ export default class System<T> {
     if (this.handleInit) {
       this.data = this.handleInit(entities, entityActions);
     }
+    entities.forEach(this.addEntity);
   }
 
   // attach entities and stuff

@@ -11,6 +11,7 @@ export interface EntityActions {
     componentName: string,
     componentData: any,
   ) => void;
+  flagUpdatedEntity: (entityUUID: string) => void;
   removeEntity: (entity: any) => void;
 }
 

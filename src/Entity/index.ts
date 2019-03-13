@@ -17,6 +17,7 @@ export default class Entity {
   private components: Component<any>[];
   public createdAt: number;
   public updatedAt?: number;
+  public needsUpdating: boolean = true;
   constructor(entityConfig?: EntityConfig) {
     this.uuid = v4();
     this.createdAt = Date.now();

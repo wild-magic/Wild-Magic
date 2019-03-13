@@ -31,9 +31,9 @@ export default class Engine {
   filterEntitiesByComponentTypes(types: string[]) {
     return Object.values(this.entities).filter(
       entity =>
-        (entity.components || []).filter((component: any) =>
-          types.includes(component.name),
-        ).length,
+        (entity.components || []).filter((component: any) => {
+          return types.includes(component.name);
+        }).length,
     );
   }
   filterEntitiesByComponentTypesIndexed(types: string[]): EntitiesState {
@@ -57,13 +57,33 @@ export default class Engine {
   tick(): Engine {
     this.latestTick = present() - this.latestTick;
     if (this.isRunning) {
+      const needsUpdatingEntityUUIDList: string[] = [];
+
+      // Loop through and update with each system
       this.systems.forEach(system =>
         system.update(
           this.latestTick,
-          this.filterEntitiesByComponentTypes(system.componentTypes),
+          this.filterEntitiesByComponentTypes(system.componentTypes).filter(
+            entity => {
+              if (
+                entity.needsUpdating &&
+                needsUpdatingEntityUUIDList.indexOf(entity.uuid) <= 0
+              ) {
+                needsUpdatingEntityUUIDList.push(entity.uuid);
+              }
+              // Optimization step goes here!
+              return entity.needsUpdating;
+            },
+          ),
           this.entityActions,
         ),
       );
+
+      // Flag them as not needing updating!
+      // At least, we assume that everything has been handled this tick...
+      needsUpdatingEntityUUIDList.forEach(uuid => {
+        this.entityActions.flagUpdatedEntity(uuid);
+      });
     }
     return this;
   }
@@ -72,10 +92,6 @@ export default class Engine {
     system.init(
       this.filterEntitiesByComponentTypes(system.componentTypes),
       this.entityActions,
-    );
-    // prime the system by adding entities
-    this.filterEntitiesByComponentTypes(system.componentTypes).forEach(
-      (entity: any) => system.addEntity(entity),
     );
     return this;
   }
