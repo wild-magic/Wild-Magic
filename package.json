@@ -1,6 +1,6 @@
 {
   "name": "wild-magic",
-  "version": "1.0.0-alpha.8",
+  "version": "1.0.0-alpha.9",
   "description": "An Isomorphic Data-Driven Entity Component System",
   "keywords": [
     "typescript",
