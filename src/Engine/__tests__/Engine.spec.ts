@@ -14,6 +14,7 @@ const entityActions: EntityActions = {
     componentName: string,
     componentData: any,
   ) => {},
+  flagUpdatedEntity: (entityUUID: string) => {},
   removeEntity: (entity: any) => {},
 };
 
