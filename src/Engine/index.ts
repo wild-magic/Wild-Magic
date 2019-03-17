@@ -28,8 +28,8 @@ export default class Engine {
   get entitiesList() {
     return Object.values(this.entities);
   }
-  filterEntitiesByComponentTypes(types: string[]) {
-    return Object.values(this.entities).filter(
+  filterEntitiesByComponentTypes(entities: EntityState[], types: string[]) {
+    return entities.filter(
       entity =>
         (entity.components || []).filter((component: any) => {
           return types.includes(component.name);
@@ -37,12 +37,12 @@ export default class Engine {
     );
   }
   filterEntitiesByComponentTypesIndexed(types: string[]): EntitiesState {
-    return this.filterEntitiesByComponentTypes(types).reduce(
-      (memo: EntitiesState, entity: EntityState) => {
-        return (memo[entity.uuid] = entity);
-      },
-      {},
-    );
+    return this.filterEntitiesByComponentTypes(
+      Object.values(this.entities),
+      types,
+    ).reduce((memo: EntitiesState, entity: EntityState) => {
+      return (memo[entity.uuid] = entity);
+    }, {});
   }
   start(): Engine {
     this.isRunning = true;
@@ -57,23 +57,17 @@ export default class Engine {
   tick(): Engine {
     this.latestTick = present() - this.latestTick;
     if (this.isRunning) {
-      const needsUpdatingEntityUUIDList: string[] = [];
+      const needsUpdatingEntityList: EntityState[] = Object.values(
+        this.entities,
+      ).filter(entity => entity.needsUpdating);
 
       // Loop through and update with each system
       this.systems.forEach(system =>
         system.update(
           this.latestTick,
-          this.filterEntitiesByComponentTypes(system.componentTypes).filter(
-            entity => {
-              if (
-                entity.needsUpdating &&
-                needsUpdatingEntityUUIDList.indexOf(entity.uuid) <= 0
-              ) {
-                needsUpdatingEntityUUIDList.push(entity.uuid);
-              }
-              // Optimization step goes here!
-              return entity.needsUpdating;
-            },
+          this.filterEntitiesByComponentTypes(
+            needsUpdatingEntityList,
+            system.componentTypes,
           ),
           this.entityActions,
         ),
@@ -81,8 +75,8 @@ export default class Engine {
 
       // Flag them as not needing updating!
       // At least, we assume that everything has been handled this tick...
-      needsUpdatingEntityUUIDList.forEach(uuid => {
-        this.entityActions.flagUpdatedEntity(uuid);
+      needsUpdatingEntityList.forEach(entity => {
+        this.entityActions.flagUpdatedEntity(entity.uuid);
       });
     }
     return this;
@@ -90,7 +84,10 @@ export default class Engine {
   addSystem(system: System<any>): Engine {
     this.systems.push(system);
     system.init(
-      this.filterEntitiesByComponentTypes(system.componentTypes),
+      this.filterEntitiesByComponentTypes(
+        Object.values(this.entities),
+        system.componentTypes,
+      ),
       this.entityActions,
     );
     return this;
