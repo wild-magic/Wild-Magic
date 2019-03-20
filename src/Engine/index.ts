@@ -2,6 +2,11 @@ import { System } from '..';
 import { present } from '../utils';
 import { EntityActions, EntitiesState } from './types';
 import { EntityState } from '../Entity/types';
+import {
+  filterEntitiesByComponentTypesIndexed,
+  filterEntitiesByComponentTypes,
+  getEntityByName,
+} from './utils';
 
 export default class Engine {
   private isRunning: boolean;
@@ -10,39 +15,33 @@ export default class Engine {
   private entityActions: EntityActions;
   private myEntities: EntitiesState;
 
+  static filterEntitiesByComponentTypes = filterEntitiesByComponentTypes;
+  static getEntityByName = getEntityByName;
+  public filterEntitiesByComponentTypes = filterEntitiesByComponentTypes;
+
   constructor(entityActions: EntityActions) {
     this.isRunning = false;
     this.latestTick = 0;
     this.systems = [];
-    this.entityActions = entityActions;
-    // Setup Entitites
-    this.myEntities = this.entityActions.getEntities();
+    this.myEntities = entityActions.getEntities();
+    this.entityActions = {
+      ...entityActions,
+      getEntities: () => this.myEntities,
+    };
   }
   get entities() {
     return this.myEntities;
   }
-  // Must be updated if any entities are changed@
+  // Must be updated if any entities are changed
   set entities(entities: EntitiesState) {
     this.myEntities = entities;
   }
   get entitiesList() {
     return Object.values(this.entities);
   }
-  filterEntitiesByComponentTypes(entities: EntityState[], types: string[]) {
-    return entities.filter(
-      entity =>
-        (entity.components || []).filter((component: any) => {
-          return types.includes(component.name);
-        }).length,
-    );
-  }
+
   filterEntitiesByComponentTypesIndexed(types: string[]): EntitiesState {
-    return this.filterEntitiesByComponentTypes(
-      Object.values(this.entities),
-      types,
-    ).reduce((memo: EntitiesState, entity: EntityState) => {
-      return (memo[entity.uuid] = entity);
-    }, {});
+    return filterEntitiesByComponentTypesIndexed(this.entities, types);
   }
   start(): Engine {
     this.isRunning = true;
