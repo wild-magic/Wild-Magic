@@ -29,14 +29,18 @@ export default class System<T> {
     if (this.handleInit) {
       this.data = this.handleInit(entities, entityActions);
     }
-    entities.forEach(this.addEntity);
+    entities.forEach(entity => this.addEntity(entity, entityActions));
   }
 
   // attach entities and stuff
-  addEntity(entity: any): void {
+  addEntity(entity: any, entityActions: EntityActions): void {
     if (this.handleEntityAdded) {
       this.entityUUIDlist.push(entity.uuid);
-      this.handleEntityAdded(entity, this.data ? (this.data as T) : null);
+      this.handleEntityAdded(
+        entity,
+        this.data ? (this.data as T) : null,
+        entityActions,
+      );
     }
   }
 
@@ -52,7 +56,10 @@ export default class System<T> {
     );
 
     diff.forEach(entityUUID => {
-      this.addEntity(entities.find(entity => entity.uuid === entityUUID));
+      this.addEntity(
+        entities.find(entity => entity.uuid === entityUUID),
+        entityActions,
+      );
     });
 
     // update all associated entities

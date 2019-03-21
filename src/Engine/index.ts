@@ -15,11 +15,14 @@ export default class Engine {
   private entityActions: EntityActions;
   private myEntities: EntitiesState;
 
+  private needsUpdatingEntityUUIDList: string[] = [];
+
   static filterEntitiesByComponentTypes = filterEntitiesByComponentTypes;
   static getEntityByName = getEntityByName;
   public filterEntitiesByComponentTypes = filterEntitiesByComponentTypes;
 
   constructor(entityActions: EntityActions) {
+    console.log('Hello Wild Magic');
     this.isRunning = false;
     this.latestTick = 0;
     this.systems = [];
@@ -27,8 +30,31 @@ export default class Engine {
     this.entityActions = {
       ...entityActions,
       getEntities: () => this.myEntities,
+      updateEntity: (
+        entityUUID: string,
+        componentName: string,
+        componentData: any,
+      ) => {
+        this.flagUpdatedEntity(entityUUID);
+        return entityActions.updateEntity(
+          entityUUID,
+          componentName,
+          componentData,
+        );
+      },
+      addEntity: (entity: any) => {
+        this.flagUpdatedEntity(entity.uuid);
+        return entityActions.addEntity(entity);
+      },
     };
   }
+
+  flagUpdatedEntity(entityUUID: string) {
+    if (this.needsUpdatingEntityUUIDList.indexOf(entityUUID) < 0) {
+      this.needsUpdatingEntityUUIDList.push(entityUUID);
+    }
+  }
+
   get entities() {
     return this.myEntities;
   }
@@ -56,9 +82,12 @@ export default class Engine {
   tick(): Engine {
     this.latestTick = present() - this.latestTick;
     if (this.isRunning) {
+      // get only the entities that are flagged as needing to be updated
       const needsUpdatingEntityList: EntityState[] = Object.values(
         this.entities,
-      ).filter(entity => entity.needsUpdating);
+      ).filter(
+        entity => this.needsUpdatingEntityUUIDList.indexOf(entity.uuid) >= 0,
+      );
 
       // Loop through and update with each system
       this.systems.forEach(system =>
@@ -72,11 +101,15 @@ export default class Engine {
         ),
       );
 
-      // Flag them as not needing updating!
-      // At least, we assume that everything has been handled this tick...
-      needsUpdatingEntityList.forEach(entity => {
-        this.entityActions.flagUpdatedEntity(entity.uuid);
-      });
+      // Remove entities from needsUpdating list
+      const needsUpdatingEntityUUIDList = needsUpdatingEntityList.map(
+        entity => entity.uuid,
+      );
+      this.needsUpdatingEntityUUIDList = this.needsUpdatingEntityUUIDList.filter(
+        entityUUID => {
+          return needsUpdatingEntityUUIDList.indexOf(entityUUID) < 0;
+        },
+      );
     }
     return this;
   }

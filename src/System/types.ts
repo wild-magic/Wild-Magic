@@ -17,6 +17,10 @@ export interface SystemConfig<T> {
   name: string;
   onUpdate: SystemUpdateCallback<T>;
   onInit?: SystemInitCallback<T>;
-  onEntityAdded?: (entity: any, data: any) => void;
+  onEntityAdded?: (
+    entity: any,
+    data: any,
+    entityActions: EntityActions,
+  ) => void;
   componentTypes?: string[];
 }
