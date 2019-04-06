@@ -1,11 +1,22 @@
-version: '3'
+version: "3.2"
+
+volumes:
+  yarnrc:
 
 services:
-  nexus-sdk:
-    image: node:11-slim
+  wild-magic:
+    image: node:11.7
     working_dir: /app
     tty: true
     volumes:
       - .:/app
-    entrypoint: npm
-    command: ['run', 'build']
+      # - yarnrc:/.yarnrc
+    environment:
+      - npm_config_cache=npm-cache
+    ports:
+      - "4000"
+      - "6006"
+      - "9000"
+    network_mode: "host"
+    entrypoint: yarn
+    command: ["dev"]
