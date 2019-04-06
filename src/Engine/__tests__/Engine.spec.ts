@@ -1,12 +1,12 @@
 import Engine from '../';
 import { System, Entity } from '../..';
-import { EntityActions } from '../types';
+import { EntityActions, EngineConfig } from '../types';
 
 const entities = {
   someUUID: JSON.parse(JSON.stringify(new Entity())),
 };
 
-const entityActions: EntityActions = {
+const engineConfig: EngineConfig = {
   getEntities: () => entities,
   addEntity: (entity: any) => {},
   updateEntity: (
@@ -14,33 +14,32 @@ const entityActions: EntityActions = {
     componentName: string,
     componentData: any,
   ) => {},
-  flagUpdatedEntity: (entityUUID: string) => {},
   removeEntity: (entity: any) => {},
 };
 
 describe('Engine', () => {
   it('should create an Engine with some properties', () => {
-    const engine = new Engine(entityActions);
+    const engine = new Engine(engineConfig);
     expect(engine).toHaveProperty('isRunning', false);
     expect(engine).toHaveProperty('latestTick', 0);
     expect(engine).toHaveProperty('systems', []);
   });
   describe('start()', () => {
     it('should start the engine', () => {
-      const engine = new Engine(entityActions);
+      const engine = new Engine(engineConfig);
       engine.start();
       expect(engine).toHaveProperty('isRunning', true);
     });
 
     it('should set latestTick to a new value', () => {
-      const engine = new Engine(entityActions);
+      const engine = new Engine(engineConfig);
       engine.start();
       // @ts-ignore
       expect(engine.latestTick).toBeGreaterThan(0);
     });
 
     it('should call the tick() method immediately', () => {
-      const engine = new Engine(entityActions);
+      const engine = new Engine(engineConfig);
       let spyValue = false;
       engine.tick = () => {
         spyValue = true;
@@ -53,7 +52,7 @@ describe('Engine', () => {
 
   describe('stop()', () => {
     it('should stop the engine', () => {
-      const engine = new Engine(entityActions);
+      const engine = new Engine(engineConfig);
       engine.start();
       expect(engine).toHaveProperty('isRunning', true);
       engine.stop();
@@ -63,7 +62,7 @@ describe('Engine', () => {
 
   describe('tick()', () => {
     it('should set latestTick to a new value', () => {
-      const engine = new Engine(entityActions);
+      const engine = new Engine(engineConfig);
       engine.tick();
       // @ts-ignore
       expect(engine.latestTick).toBeGreaterThan(0);
@@ -75,7 +74,7 @@ describe('Engine', () => {
         name: 'mySystem',
         onUpdate: delta => (testDelta = delta),
       });
-      const engine = new Engine(entityActions);
+      const engine = new Engine(engineConfig);
       engine.addSystem(mySystem);
       engine.tick();
       expect(testDelta).toEqual(0);
@@ -87,7 +86,7 @@ describe('Engine', () => {
         name: 'mySystem',
         onUpdate: delta => (testValue = delta),
       });
-      const engine = new Engine(entityActions);
+      const engine = new Engine(engineConfig);
       engine
         .addSystem(mySystem)
         .start()
@@ -103,7 +102,7 @@ describe('Engine', () => {
         name: 'mySystem',
         onUpdate: () => {},
       });
-      const engine = new Engine(entityActions);
+      const engine = new Engine(engineConfig);
       const isChainable = engine.addSystem(mySystem);
       expect(isChainable).toBe(engine);
       expect(engine).toHaveProperty('systems', [mySystem]);
@@ -115,7 +114,7 @@ describe('Engine', () => {
         onInit: () => ({ hello: 'world' }),
         onUpdate: () => {},
       });
-      const engine = new Engine(entityActions);
+      const engine = new Engine(engineConfig);
       engine.addSystem(mySystem);
       expect(mySystem).toHaveProperty('data', { hello: 'world' });
     });

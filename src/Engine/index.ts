@@ -1,12 +1,12 @@
 import { System } from '..';
-import { present } from '../utils';
-import { EntityActions, EntitiesState } from './types';
+import { EntityActions, EntitiesState, EngineConfig } from './types';
 import { EntityState } from '../Entity/types';
 import {
   filterEntitiesByComponentTypesIndexed,
   filterEntitiesByComponentTypes,
   getEntityByName,
 } from './utils';
+import { present } from '../utils';
 
 export default class Engine {
   private isRunning: boolean;
@@ -21,30 +21,52 @@ export default class Engine {
   static getEntityByName = getEntityByName;
   public filterEntitiesByComponentTypes = filterEntitiesByComponentTypes;
 
-  constructor(entityActions: EntityActions) {
-    console.log('Hello Wild Magic');
+  constructor(engineConfig: EngineConfig) {
+    console.log('Hello Engine!');
     this.isRunning = false;
     this.latestTick = 0;
     this.systems = [];
-    this.myEntities = entityActions.getEntities();
+    this.myEntities = engineConfig.getEntities();
     this.entityActions = {
-      ...entityActions,
+      ...engineConfig,
       getEntities: () => this.myEntities,
+      getEntitiesByComponentName: (componentName: string) => {
+        return this.filterEntitiesByComponentTypes(
+          Object.values(this.entities),
+          [componentName],
+        );
+      },
+      getEntityByName: (entityName: string) => {
+        return (
+          Object.values(this.entities).find(
+            entity => entity.name === entityName,
+          ) || null
+        );
+      },
+      getEntityByUUID: (entityUUID: string) => {
+        return (
+          Object.values(this.entities).find(
+            entity => entity.name === entityUUID,
+          ) || null
+        );
+      },
       updateEntity: (
         entityUUID: string,
         componentName: string,
         componentData: any,
+        patch?: boolean,
       ) => {
         this.flagUpdatedEntity(entityUUID);
-        return entityActions.updateEntity(
+        return engineConfig.updateEntity(
           entityUUID,
           componentName,
           componentData,
+          patch,
         );
       },
       addEntity: (entity: any) => {
         this.flagUpdatedEntity(entity.uuid);
-        return entityActions.addEntity(entity);
+        return engineConfig.addEntity(entity);
       },
     };
   }
@@ -71,7 +93,7 @@ export default class Engine {
   }
   start(): Engine {
     this.isRunning = true;
-    this.latestTick = present();
+    this.latestTick = 0;
     this.tick();
     return this;
   }
@@ -79,8 +101,12 @@ export default class Engine {
     this.isRunning = false;
     return this;
   }
+
+  get delta() {
+    return present() - this.latestTick;
+  }
+
   tick(): Engine {
-    this.latestTick = present() - this.latestTick;
     if (this.isRunning) {
       // get only the entities that are flagged as needing to be updated
       const needsUpdatingEntityList: EntityState[] = Object.values(
@@ -92,7 +118,7 @@ export default class Engine {
       // Loop through and update with each system
       this.systems.forEach(system =>
         system.update(
-          this.latestTick,
+          this.delta,
           this.filterEntitiesByComponentTypes(
             needsUpdatingEntityList,
             system.componentTypes,
@@ -110,6 +136,7 @@ export default class Engine {
           return needsUpdatingEntityUUIDList.indexOf(entityUUID) < 0;
         },
       );
+      this.latestTick = present();
     }
     return this;
   }
