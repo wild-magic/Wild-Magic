@@ -4,7 +4,7 @@
   "alias": "wildmagic.io",
   "builds": [
     {
-      "src": "packages/web/package.json",
+      "src": "packages/web",
       "use": "@now/next"
     }
   ]
