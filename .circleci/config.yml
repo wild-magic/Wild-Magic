@@ -4,17 +4,17 @@
 #
 version: 2
 jobs:
-  build:
+  wild-magic:
     docker:
       # specify the version you desire here
-      - image: circleci/node:7.10
+      - image: circleci/node:latest
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/mongo:3.4.4
 
-    working_directory: ~/repo
+    working_directory: ~/repo/packages/wild-magic
 
     steps:
       - checkout
@@ -34,4 +34,4 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       # run tests!
-      - run: npm test -- --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+      - run: npm test

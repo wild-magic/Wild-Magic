@@ -21,7 +21,7 @@
   "unpkg": "dist/wild-magic.js",
   "license": "Apache-2.0",
   "scripts": {
-    "test": "jest",
+    "test": "jest --coverage src",
     "lint": "tslint src/**/*",
     "build": "npm run clean && npm run build:commonjs && npm run build:es && npm run build:umd",
     "build:commonjs": "tsc --module commonjs --target es5 --outDir lib",
@@ -29,6 +29,7 @@
     "build:umd": "rollup -c",
     "documentation": "typedoc --out documentation/ --exclude \"**/*+(test|spec).ts\" src/",
     "clean": "rm -fr es/ && rm -fr dist/ && rm -fr lib/ && rm -fr documentation/",
+    "codecov": "codecov",
     "prepublishOnly": "npm run clean && npm run test && npm run lint && npm run build"
   },
   "devDependencies": {
@@ -37,7 +38,7 @@
     "@babel/preset-env": "^7.1.0",
     "@types/jest": "^23.3.5",
     "@types/uuid": "^3.4.4",
-    "coveralls": "^3.0.2",
+    "codecov": "^3.3.0",
     "eslint": "^5.6.0",
     "jest": "^24.1.0",
     "jest-fetch-mock": "^2.0.1",
