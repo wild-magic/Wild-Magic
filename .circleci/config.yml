@@ -3,7 +3,7 @@
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
 version: 2
-jobs:
+worflows:
   wild-magic:
     docker:
       # specify the version you desire here
