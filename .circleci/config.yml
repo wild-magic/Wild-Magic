@@ -37,5 +37,3 @@ jobs:
 
       # run tests!
       - run: npm test
-      - codecov/upload:
-          conf: "../../.codecov.yaml"
