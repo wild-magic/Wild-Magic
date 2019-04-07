@@ -2,7 +2,6 @@
 .DS_Store
 dist/
 es/
-lib/
 documentation/
 node_modules/# Logs
 logs
@@ -67,7 +66,6 @@ typings/
 .next
 
 # ts output
-lib/
 envs/*.env
 .vscode
 coverage/
