@@ -1,6 +1,6 @@
 {
   "name": "Wild-Magic",
-  "version": "1.0.0-alpha.14",
+  "version": "1.0.0-beta.1",
   "description": "A set of tools for game development for the web",
   "main": "index.js",
   "repository": "https://github.com/wild-magic/Wild-Magic.git",
