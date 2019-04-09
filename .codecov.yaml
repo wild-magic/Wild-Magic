@@ -1,0 +1,12 @@
+coverage:
+  status:
+    project:
+      default: off
+      wild-magic:
+        flags: frontend
+        target: 90%
+
+flags:
+  wild-magic:
+    paths:
+      - packages/wild-magic

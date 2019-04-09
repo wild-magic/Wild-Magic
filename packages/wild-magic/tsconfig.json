@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     /* Basic Options */
-    "target": "es2015" /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'. */,
-    // "module": "commonjs",                     /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */
+    "target": "es5" /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'. */,
+    "module": "commonjs" /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */,
     "lib": [
       /* Specify library files to be included in the compilation. */
       "es2017",
@@ -60,12 +60,5 @@
     // "experimentalDecorators": true,        /* Enables experimental support for ES7 decorators. */
     // "emitDecoratorMetadata": true,         /* Enables experimental support for emitting type metadata for decorators. */
   },
-  "exclude": [
-    "node_modules",
-    "es",
-    "lib",
-    "dist",
-    "**/__mocks__/**",
-    "**/__tests__/**"
-  ]
+  "exclude": ["node_modules", "dist", "**/__mocks__/**", "**/__tests__/**"]
 }
