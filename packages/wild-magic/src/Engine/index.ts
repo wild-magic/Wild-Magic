@@ -53,7 +53,7 @@ export const createEngine = (
     )(engineState),
   start: () =>
     pipe(
-      tick,
+      tick(updateSystems(processSystems))(countLatestTick(present)),
       createEngine,
     )({ ...engineState, latestTick: 0, isRunning: true }),
   stop: () => createEngine({ ...engineState, isRunning: false }),

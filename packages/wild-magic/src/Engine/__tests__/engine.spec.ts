@@ -30,22 +30,14 @@ describe('Engine', () => {
       testForEngine(engine);
     });
 
-    xdescribe('tick', () => {
-      beforeEach(() => {
-        jest.resetModules();
-      });
+    describe('tick', () => {
       it('should increment the latest tick', () => {
-        jest.mock('../../utils', () => () => ({
-          present: () => {
-            console.log('present!');
-            return 1234;
-          },
-        }));
-
-        const engine = createEngine();
-        const tickedEngine = engine.tick();
-        testForEngine(tickedEngine);
-        expect(tickedEngine).toHaveProperty('latestTick', 1234);
+        const engine = createEngine()
+          .start()
+          .tick();
+        testForEngine(engine);
+        expect(engine).toHaveProperty('latestTick');
+        expect(engine.latestTick).toBeGreaterThan(0);
       });
     });
   });
