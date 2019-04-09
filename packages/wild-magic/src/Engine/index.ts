@@ -1,44 +1,61 @@
-import { compose, present } from '../utils';
+import { compose, present, pipe } from '../utils';
+import { EngineState, Engine, EngineFunctor } from './types';
 
-export interface EngineState {
-  isRunning: boolean;
-  systems: any[];
-  components: any[];
-  latestTick: number;
-}
-
-export const engineDefaultState: EngineState = {
+export const defaultEngineState: EngineState = {
   isRunning: false,
   systems: [],
   components: [],
   latestTick: 0,
 };
 
-export const processSystem = (system: any) => {
-  processed: 'processed!';
-};
+export type System = any;
 
-export const makeTick = (updateSystems: (systems: any[]) => any[]) => (
-  present: () => number,
-) => (engineState: EngineState) =>
-  engineState.isRunning
-    ? {
-        ...engineState,
-        // do system things here!
-        systems: updateSystems(engineState.systems),
-        latestTick: present(),
-      }
-    : engineState;
+export const processSystem = (system: System): System => ({
+  processed: 'processed!',
+});
 
-export const tick = makeTick(() => [])(present);
+type processSystem = (system: System) => System;
+export const processSystems = (systems: System[]) => systems.map(processSystem);
 
-export const createEngine = (
-  engineState: EngineState = engineDefaultState,
+type ProcessSystems = (systems: System[]) => System[];
+export const updateSystems = (processSystems: ProcessSystems) => (
+  engineState: EngineState,
 ) => ({
   ...engineState,
-  tick: () => createEngine(tick(engineState)),
+  systems: processSystems(engineState.systems),
+});
+
+export const countLatestTick = (present: () => number) => (
+  engineState: EngineState,
+) => ({
+  ...engineState,
+  latestTick: present() - engineState.latestTick,
+});
+
+export const tick = (updateSystems: EngineFunctor) => (
+  countLatestTick: EngineFunctor,
+) => (engineState: EngineState) =>
+  engineState.isRunning
+    ? pipe(
+        updateSystems,
+        countLatestTick,
+      )(engineState)
+    : engineState;
+
+export const createEngine = (
+  engineState: EngineState = defaultEngineState,
+): Engine => ({
+  ...engineState,
+  tick: () =>
+    pipe(
+      tick(updateSystems(processSystems))(countLatestTick(present)),
+      createEngine,
+    )(engineState),
   start: () =>
-    createEngine(tick({ ...engineState, latestTick: 0, isRunning: true })),
+    pipe(
+      tick,
+      createEngine,
+    )({ ...engineState, latestTick: 0, isRunning: true }),
   stop: () => createEngine({ ...engineState, isRunning: false }),
   addSystem: () => {},
   removeSystem: () => {},
