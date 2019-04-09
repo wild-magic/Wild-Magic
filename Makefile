@@ -8,8 +8,12 @@ dshell:
 
 install:
 	@echo "Installing project's dependencies... 🚀"
-	@yarn
+	@yarn install
 	@node_modules/.bin/lerna bootstrap
+
+link:
+	@echo "starting all the things in dev mode"
+	@node_modules/.bin/lerna link
 
 start:
 	@echo "starting all the things in dev mode"
