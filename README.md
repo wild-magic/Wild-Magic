@@ -1,7 +1,7 @@
 <p align="center"><a href="https://wildmagic.io" target="_blank" rel="noopener noreferrer"><img height="300" src="https://wildmagic.io/_next/static/images/wildmagic-og-aef43d678dae8ef41adbb22976c566b5.png" alt="Wild Magic logo"></a></p>
 
 <p align="center">
-  <a href="https://lernajs.io/"><img src="https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg" alt="Build Status"></a>
+  <a href="https://lernajs.io/"><img src="https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg" alt="Maintained with Lerna"></a>
 </p>
 
 <h2 align="center">Games with Javascript</h2>
