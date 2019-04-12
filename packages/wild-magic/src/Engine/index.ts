@@ -1,5 +1,20 @@
 import { compose, present, pipe } from '../utils';
 import { EngineState, Engine, EngineFunctor } from './types';
+import { System } from '../System';
+
+export interface OptionalEngineStateParams {
+  isRunning?: boolean;
+  systems?: System[];
+  components?: any[];
+  latestTick?: number;
+}
+
+export const applyEngineDefaults = (
+  optionalEngineStateParams: OptionalEngineStateParams,
+) => ({
+  ...defaultEngineState,
+  ...optionalEngineStateParams,
+});
 
 export const defaultEngineState: EngineState = {
   isRunning: false,
@@ -8,21 +23,9 @@ export const defaultEngineState: EngineState = {
   latestTick: 0,
 };
 
-export type System = any;
-
-export const processSystem = (system: System): System => ({
-  processed: 'processed!',
-});
-
-type processSystem = (system: System) => System;
-export const processSystems = (systems: System[]) => systems.map(processSystem);
-
-type ProcessSystems = (systems: System[]) => System[];
-export const updateSystems = (processSystems: ProcessSystems) => (
-  engineState: EngineState,
-) => ({
+export const updateSystems = (engineState: EngineState) => ({
   ...engineState,
-  systems: processSystems(engineState.systems),
+  systems: engineState.systems.map(system => system.update()),
 });
 
 export const countLatestTick = (present: () => number) => (
@@ -42,23 +45,36 @@ export const tick = (updateSystems: EngineFunctor) => (
       )(engineState)
     : engineState;
 
+export const createEngineWithOptions = (options: OptionalEngineStateParams) =>
+  createEngine(applyEngineDefaults(options));
+
 export const createEngine = (
   engineState: EngineState = defaultEngineState,
 ): Engine => ({
   ...engineState,
   tick: () =>
     pipe(
-      tick(updateSystems(processSystems))(countLatestTick(present)),
+      tick(updateSystems)(countLatestTick(present)),
       createEngine,
     )(engineState),
   start: () =>
     pipe(
-      tick(updateSystems(processSystems))(countLatestTick(present)),
+      tick(updateSystems)(countLatestTick(present)),
       createEngine,
     )({ ...engineState, latestTick: 0, isRunning: true }),
   stop: () => createEngine({ ...engineState, isRunning: false }),
-  addSystem: () => {},
-  removeSystem: () => {},
+  addSystem: (system: System) =>
+    createEngine({
+      ...engineState,
+      systems: [...engineState.systems, system.added()],
+    }),
+  removeSystem: (name: string) =>
+    createEngine({
+      ...engineState,
+      systems: engineState.systems
+        .map(system => (system.name === name ? system.removed() : system))
+        .filter(Boolean) as System[],
+    }),
 });
 
-export default createEngine;
+export default createEngineWithOptions;
