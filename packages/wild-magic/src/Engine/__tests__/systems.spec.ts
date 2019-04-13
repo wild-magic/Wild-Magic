@@ -1,9 +1,4 @@
-import {
-  createEngine,
-  updateSystems,
-  defaultEngineState,
-  createEngineWithOptions,
-} from '..';
+import { createEngine, createEngineWithOptions } from '..';
 import { createSystem } from '../../System';
 
 describe('Engine System Functions', () => {
@@ -26,7 +21,7 @@ describe('Engine System Functions', () => {
         name: 'mySystem',
       });
       const mockFn = jest.fn();
-      system.added = mockFn;
+      system.add = mockFn;
       engine.addSystem(system);
       expect(mockFn.mock.calls.length).toBe(1);
     });
@@ -48,12 +43,12 @@ describe('Engine System Functions', () => {
   });
 
   describe('removeSystem()', () => {
-    it('should call the system.removed() method', () => {
+    it('should call the system.remove() method', () => {
       const system = createSystem({
         name: 'mySystem',
       });
       const mockFn = jest.fn(() => null);
-      system.removed = mockFn;
+      system.remove = mockFn;
       const engine = createEngineWithOptions({
         systems: [system],
       });

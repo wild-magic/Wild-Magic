@@ -1,20 +1,47 @@
-export interface SystemState {
+import { pipe } from '../utils';
+
+export interface SystemState<D> {
   name: string;
+  onAdd?: () => D;
+  onUpdate?: (data: D) => D;
+  onRemove?: (data: D) => D;
+  data?: D;
 }
 
-export interface System extends SystemState {
-  added: () => System;
-  removed: () => null;
-  update: () => System;
+export interface System<D> extends SystemState<D> {
+  add: () => System<D>;
+  remove: () => null;
+  update: () => System<D>;
+  data: D;
 }
 
-export const update = (systemState: SystemState) => {};
+export type AnySystemState = SystemState<any>;
 
-export const createSystem = (systemState: SystemState) => ({
+export type SystemFunction<D> = (systemState: SystemState<D>) => System<D>;
+
+export const safeCallRemove = (systemState: AnySystemState) =>
+  systemState.onRemove && systemState.onRemove(systemState.data || {});
+
+export const createSystem = (systemState: AnySystemState) => ({
   ...systemState,
-  added: () => createSystem(systemState),
-  removed: () => null,
-  update: () => createSystem(systemState),
+  data: systemState.data || {},
+  add: () =>
+    createSystem({
+      ...systemState,
+      data: systemState.onAdd && systemState.onAdd(),
+    }),
+  remove: () =>
+    pipe(
+      safeCallRemove,
+      () => createSystem(systemState),
+    )(systemState),
+  update: () =>
+    createSystem({
+      ...systemState,
+      data: systemState.onUpdate
+        ? systemState.onUpdate(systemState.data || {})
+        : systemState.data,
+    }),
   // components: {
   //   watch: [],
   //   added: () => {},

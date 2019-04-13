@@ -1,8 +1,9 @@
 import { System } from '../System';
+import { AnySystem } from '.';
 
 export interface EngineState {
   isRunning: boolean;
-  systems: System[];
+  systems: AnySystem[];
   components: any[];
   latestTick: number;
 }
@@ -17,6 +18,6 @@ export interface Engine extends EngineState {
   tick: EngineFunction;
   start: EngineFunction;
   stop: EngineFunction;
-  addSystem: (system: System) => Engine;
+  addSystem: (system: AnySystem) => Engine;
   removeSystem: (name: string) => Engine;
 }

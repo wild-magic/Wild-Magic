@@ -1,9 +1,10 @@
-import { createSystem, System } from '..';
+import { createSystem } from '..';
+import { AnySystem } from '../../Engine';
 
-export const testForSystem = (system: System) => {
+export const testForSystem = (system: AnySystem) => {
   expect(system).toHaveProperty('name');
-  expect(system).toHaveProperty('added');
-  expect(system).toHaveProperty('removed');
+  expect(system).toHaveProperty('add');
+  expect(system).toHaveProperty('remove');
   expect(system).toHaveProperty('update');
 };
 

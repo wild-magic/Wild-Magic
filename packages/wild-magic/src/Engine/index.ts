@@ -4,7 +4,7 @@ import { System } from '../System';
 
 export interface OptionalEngineStateParams {
   isRunning?: boolean;
-  systems?: System[];
+  systems?: AnySystem[];
   components?: any[];
   latestTick?: number;
 }
@@ -48,6 +48,15 @@ export const tick = (updateSystems: EngineFunctor) => (
 export const createEngineWithOptions = (options: OptionalEngineStateParams) =>
   createEngine(applyEngineDefaults(options));
 
+// const findSystemByName = (name: string) => (engineState: EngineState) =>
+//   engineState.systems.filter(system => system.name === name);
+
+// const exectuteRemoveBySystemName = (name: string) => (engineState: EngineState) => either(
+//   identity
+// )(findSystemByName(name)(engineState))
+
+export type AnySystem = System<any>;
+
 export const createEngine = (
   engineState: EngineState = defaultEngineState,
 ): Engine => ({
@@ -63,17 +72,17 @@ export const createEngine = (
       createEngine,
     )({ ...engineState, latestTick: 0, isRunning: true }),
   stop: () => createEngine({ ...engineState, isRunning: false }),
-  addSystem: (system: System) =>
+  addSystem: (system: AnySystem) =>
     createEngine({
       ...engineState,
-      systems: [...engineState.systems, system.added()],
+      systems: [...engineState.systems, system.add()],
     }),
   removeSystem: (name: string) =>
     createEngine({
       ...engineState,
       systems: engineState.systems
-        .map(system => (system.name === name ? system.removed() : system))
-        .filter(Boolean) as System[],
+        .map(system => (system.name === name ? system.remove() : system))
+        .filter(Boolean) as AnySystem[],
     }),
 });
 
