@@ -1,11 +1,12 @@
 import { compose, present, pipe } from '../utils';
 import { EngineState, Engine, EngineFunctor } from './types';
 import { System } from '../System';
+import { ComponentStateProps, defaultComponentStateProps } from '../State';
 
 export interface OptionalEngineStateParams {
   isRunning?: boolean;
   systems?: AnySystem[];
-  components?: any[];
+  components?: ComponentStateProps;
   latestTick?: number;
 }
 
@@ -19,13 +20,15 @@ export const applyEngineDefaults = (
 export const defaultEngineState: EngineState = {
   isRunning: false,
   systems: [],
-  components: [],
+  components: defaultComponentStateProps,
   latestTick: 0,
 };
 
 export const updateSystems = (engineState: EngineState) => ({
   ...engineState,
-  systems: engineState.systems.map(system => system.update()),
+  systems: engineState.systems.map(system =>
+    system.update(engineState.components),
+  ),
 });
 
 export const countLatestTick = (present: () => number) => (
@@ -75,13 +78,15 @@ export const createEngine = (
   addSystem: (system: AnySystem) =>
     createEngine({
       ...engineState,
-      systems: [...engineState.systems, system.add()],
+      systems: [...engineState.systems, system.add(engineState.components)],
     }),
   removeSystem: (name: string) =>
     createEngine({
       ...engineState,
       systems: engineState.systems
-        .map(system => (system.name === name ? system.remove() : system))
+        .map(system =>
+          system.name === name ? system.remove(engineState.components) : system,
+        )
         .filter(Boolean) as AnySystem[],
     }),
 });

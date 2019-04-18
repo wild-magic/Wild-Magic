@@ -1,11 +1,12 @@
 import { System } from '../System';
 import { AnySystem } from '.';
+import { ComponentStateProps } from '../State';
 
 export interface EngineState {
   isRunning: boolean;
   systems: AnySystem[];
-  components: any[];
   latestTick: number;
+  components: ComponentStateProps;
 }
 
 export type EngineFunction = () => Engine;
