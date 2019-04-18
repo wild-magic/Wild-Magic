@@ -1,4 +1,4 @@
-import * as uuid from 'uuid';
+import uuid from 'uuid';
 
 export type uuid = string;
 
@@ -35,5 +35,5 @@ export const createComponent = ({
 }: AnyComponentProps): AnyComponent => ({
   data,
   type,
-  id: uuid(),
+  id: uuid.v4(),
 });

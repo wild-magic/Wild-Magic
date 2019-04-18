@@ -85,5 +85,5 @@
     "@babel/plugin-proposal-class-properties": "^7.4.0",
     "uuid": "^3.3.2"
   },
-  "gitHead": "bb1c66533f89a92fd5985b88dbdb34018b290f7d"
+  "gitHead": "5735800a003eeeeb76c6686aa7474d4d8d258c17"
 }
