@@ -1,4 +1,4 @@
-import uuid = require('uuid');
+import * as uuid from 'uuid';
 
 export type uuid = string;
 
