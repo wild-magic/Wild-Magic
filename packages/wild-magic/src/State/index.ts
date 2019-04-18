@@ -34,7 +34,7 @@ export type AnyObject = { [key: string]: any };
 export const filterObjectByKeys = (objectToFilter: AnyObject) => (
   keysToFilter: string[],
 ) =>
-  objectToFilter.reduce(
+  Object.keys(objectToFilter).reduce(
     (obj: AnyObject, key: string) =>
       keysToFilter.includes(key) ? { ...obj, [key]: objectToFilter[key] } : obj,
     {},
