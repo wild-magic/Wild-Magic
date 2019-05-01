@@ -1,6 +1,7 @@
 import { System } from '../System';
 import { AnySystem } from '.';
-import { ComponentStateProps } from '../State';
+import { ComponentStateProps, ComponentIndex } from '../State';
+import { AnyComponent } from '../Component';
 
 export interface EngineState {
   isRunning: boolean;
@@ -21,4 +22,7 @@ export interface Engine extends EngineState {
   stop: EngineFunction;
   addSystem: (system: AnySystem) => Engine;
   removeSystem: (name: string) => Engine;
+  addComponent: (component: AnyComponent) => Engine;
+  removeComponent: (component: AnyComponent) => Engine;
+  updateComponentIndex: (componentIndex: ComponentIndex) => Engine;
 }

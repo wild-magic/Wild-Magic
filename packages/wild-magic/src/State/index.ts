@@ -1,23 +1,31 @@
 import { AnyComponent, uuid } from '../Component';
+import { Observable } from 'rxjs';
 
 export interface ComponentStateProps {
   componentIndex: ComponentIndex;
   addComponent: (component: AnyComponent) => void;
-  updateComponent: (uuid: uuid) => void;
+  updateComponent: (component: AnyComponent) => void;
   removeComponent: (uuid: uuid) => void;
+  // getComponentById: (uuid: uuid) => AnyComponent | null;
 }
 
 export interface ComponentIndex {
+  all: {
+    [uuid: string]: AnyComponent;
+  };
   [type: string]: {
     [uuid: string]: AnyComponent;
   };
 }
 
 export const defaultComponentStateProps: ComponentStateProps = {
-  componentIndex: {},
+  componentIndex: {
+    all: {},
+  },
   addComponent: (component: AnyComponent) => {},
-  updateComponent: (uuid: uuid) => {},
+  updateComponent: (component: AnyComponent) => {},
   removeComponent: (uuid: uuid) => {},
+  // getComponentById: (uuid: uuid) => null,
 };
 
 export interface SystemComponentStateProps {
@@ -25,8 +33,9 @@ export interface SystemComponentStateProps {
     [uuid: string]: AnyComponent;
   };
   addComponent: (component: AnyComponent) => void;
-  updateComponent: (uuid: uuid) => void;
+  updateComponent: (component: AnyComponent) => void;
   removeComponent: (uuid: uuid) => void;
+  getComponentById: (uuid: uuid) => AnyComponent | null;
 }
 
 export type AnyObject = { [key: string]: any };
@@ -44,5 +53,6 @@ export const filterComponentStatePropsByComponentTypes = (types: string[]) => (
   components: ComponentStateProps,
 ): SystemComponentStateProps => ({
   ...components,
+  getComponentById: (uuid: string) => components.componentIndex.all[uuid],
   components: types ? filterObjectByKeys(components.componentIndex)(types) : {},
 });

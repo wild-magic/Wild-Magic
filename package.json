@@ -8,5 +8,8 @@
   "license": "MIT",
   "devDependencies": {
     "lerna": "^3.13.1"
+  },
+  "dependencies": {
+    "rxjs": "^6.5.1"
   }
 }

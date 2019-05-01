@@ -1,7 +1,12 @@
 import { compose, present, pipe } from '../utils';
 import { EngineState, Engine, EngineFunctor } from './types';
 import { System } from '../System';
-import { ComponentStateProps, defaultComponentStateProps } from '../State';
+import {
+  ComponentStateProps,
+  defaultComponentStateProps,
+  ComponentIndex,
+} from '../State';
+import { AnyComponent } from '../Component';
 
 export interface OptionalEngineStateParams {
   isRunning?: boolean;
@@ -27,7 +32,7 @@ export const defaultEngineState: EngineState = {
 export const updateSystems = (engineState: EngineState) => ({
   ...engineState,
   systems: engineState.systems.map(system =>
-    system.update(engineState.components),
+    system.update(engineState.latestTick, engineState.components),
   ),
 });
 
@@ -50,13 +55,6 @@ export const tick = (updateSystems: EngineFunctor) => (
 
 export const createEngineWithOptions = (options: OptionalEngineStateParams) =>
   createEngine(applyEngineDefaults(options));
-
-// const findSystemByName = (name: string) => (engineState: EngineState) =>
-//   engineState.systems.filter(system => system.name === name);
-
-// const exectuteRemoveBySystemName = (name: string) => (engineState: EngineState) => either(
-//   identity
-// )(findSystemByName(name)(engineState))
 
 export type AnySystem = System<any>;
 
@@ -88,6 +86,32 @@ export const createEngine = (
           system.name === name ? system.remove(engineState.components) : system,
         )
         .filter(Boolean) as AnySystem[],
+    }),
+  addComponent: (component: AnyComponent) =>
+    createEngine({
+      ...engineState,
+      systems: engineState.systems.map(system =>
+        system.componentTypes && system.componentTypes.includes(component.type)
+          ? system.addComponent(component)(engineState.components)
+          : system,
+      ),
+    }),
+  updateComponentIndex: (componentIndex: ComponentIndex) =>
+    createEngine({
+      ...engineState,
+      components: {
+        ...engineState.components,
+        componentIndex,
+      },
+    }),
+  removeComponent: (component: AnyComponent) =>
+    createEngine({
+      ...engineState,
+      systems: engineState.systems.map(system =>
+        system.componentTypes && system.componentTypes.includes(component.type)
+          ? system.addComponent(component)(engineState.components)
+          : system,
+      ),
     }),
 });
 
